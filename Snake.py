@@ -16,9 +16,11 @@ pos_list = []
 stamp_list = []
 food_pos = []
 food_stamps=[]
-
+count = 0
 snake = turtle.clone()
-snake.shape("square")
+snake.shape("turtle")
+snake.color("blue")
+
 
 turtle.hideturtle()
 for i in range(START_LENGTH) :
@@ -46,26 +48,40 @@ LEFT = 2
 DOWN = 1
 RIGHT = 3
 direction = UP
-UP_EDGE = 250
-DOWN_EDGE = -250
-RIGHT_EDGE = 400
-LEFT_EDGE = -400
+
+box = turtle.clone()
+box.hideturtle()
+box.penup()
+box.goto(250,400)
+box.pendown()
+box.goto(250, -400)
+box.goto(-250 , -400)
+box.goto( -250,400)
+
+UP_EDGE = 400
+DOWN_EDGE = -400
+RIGHT_EDGE = 250
+LEFT_EDGE = -250
 def up ():
     global direction
-    direction = UP
-    print("you pressed the up key ")
+    if direction == LEFT or direction == RIGHT:
+        direction = UP
+        print("you pressed the up key ")
 def down ():
     global  direction
-    direction = DOWN
-    print("you pressed down ")
+    if direction == LEFT or direction == RIGHT:
+        direction = DOWN
+        print("you pressed down ")
 def right ():
     global direction
-    direction = RIGHT
-    print("you pressed right")
+    if direction == UP or direction == DOWN :
+        direction = RIGHT
+        print("you pressed right")
 def left ():
     global direction
-    direction = LEFT
-    print( "you pressed left")
+    if direction == DOWN or direction == UP :
+        direction = LEFT
+        print( "you pressed left")
 
 turtle.onkeypress(up , UP_ARROW)
 turtle.onkeypress(down , DOWN_ARROW)
@@ -73,10 +89,11 @@ turtle.onkeypress(right,RIGHT_ARROW)
 turtle.onkeypress(left , LEFT_ARROW)
 turtle.listen()
 
-
+score = turtle.clone()
+score.goto(-100 , 200 )
 def make_food():
-    min_x = -int(size_x/2/SQUARE_SIZE)+1
-    max_x = int (size_x/2/SQUARE_SIZE)-1
+    min_x = -int(size_x/4/SQUARE_SIZE)+1
+    max_x = int (size_x/4/SQUARE_SIZE)-1
     min_y = -int(size_y/2/SQUARE_SIZE)+1
     max_y = int( size_y/2/SQUARE_SIZE) -1
 
@@ -91,6 +108,8 @@ def make_food():
         food_pos.append (my_food_pos)
         new_stamp = food.stamp()
         food_stamps.append( new_stamp)
+    
+    
 
 
 def move_snake():
@@ -122,6 +141,10 @@ def move_snake():
     
     global food_stamp,food_pos
     if snake.pos() in food_pos:
+        global count 
+        count += 100
+        score.clear()
+        score.write(" score : " + str(count) , font = ("Arial " , 18 , "normal" ))
         food_ind = food_pos.index(snake.pos())
         food.clearstamp(food_stamps[food_ind])
         food_pos.pop(food_ind)
@@ -154,8 +177,7 @@ def move_snake():
 
     if snake.pos() in pos_list[0:-1]:
         quit()
-
-
+    
 
 
 
@@ -175,8 +197,15 @@ for this_food_pos in food_pos:
     food.goto(this_food_pos[0],this_food_pos[1] )
     stamp_id = food.stamp()
     food_stamps.append(stamp_id)
+
     
 food.hideturtle()
+
+
+
+
+
+
 
 
     
